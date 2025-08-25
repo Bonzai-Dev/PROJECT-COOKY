@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3 uid="uid://b52f84gna7qrn"]
+
+[ext_resource type="PhysicsMaterial" uid="uid://d1ghpxv2it4lq" path="res://assets/physic_materials/player.tres" id="1_sysx0"]
+[ext_resource type="Script" uid="uid://ko15jvidrndq" path="res://src/Characters/Player.cs" id="1_wj3lj"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sysx0"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_y07ac"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_tb2t1"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_mn4l5"]
+
+[node name="Player" type="RigidBody3D" node_paths=PackedStringArray("Model", "GroundCheck")]
+physics_material_override = ExtResource("1_sysx0")
+lock_rotation = true
+script = ExtResource("1_wj3lj")
+FreecamEnabled = false
+Model = NodePath("Model")
+GroundCheck = NodePath("GroundCheck")
+
+[node name="Collider" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_sysx0")
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Bean" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+gi_mode = 2
+mesh = SubResource("CapsuleMesh_y07ac")
+
+[node name="Glasses" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(0.764798, 0, 0, 0, 0.141848, 0, 0, 0, 0.820248, 0, 1.49343, -0.123243)
+gi_mode = 2
+mesh = SubResource("BoxMesh_tb2t1")
+
+[node name="Camera" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42912, 0)
+
+[node name="GroundCheck" type="ShapeCast3D" parent="."]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0.986705, 0)
+shape = SubResource("SphereShape3D_mn4l5")
+target_position = Vector3(0, -1.055, 0)
+max_results = 1

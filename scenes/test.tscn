@@ -1,0 +1,68 @@
+[gd_scene load_steps=9 format=3 uid="uid://co2aqyx3lct6b"]
+
+[ext_resource type="Environment" uid="uid://3fymsgcske2h" path="res://assets/environments/default.tres" id="1_74lek"]
+[ext_resource type="PackedScene" uid="uid://dfixnhssifaui" path="res://assets/nodes/camera.tscn" id="1_iyx0m"]
+[ext_resource type="PackedScene" uid="uid://b52f84gna7qrn" path="res://assets/nodes/player.tscn" id="4_at5dv"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ajshl"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ghpyy"]
+uv1_scale = Vector3(0.2, 0.2, 0.2)
+uv1_triplanar = true
+uv1_world_triplanar = true
+uv2_world_triplanar = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_44saj"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_j5jx5"]
+size = Vector3(1, 1.60059, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lpvoh"]
+
+[node name="Test" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.701395, 0.712773, 0, -0.712773, 0.701395, -1.1418, 6.34516, -0.12027)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("1_74lek")
+
+[node name="Camera" parent="." node_paths=PackedStringArray("follow_target") instance=ExtResource("1_iyx0m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.07831, 0)
+follow_target = NodePath("../Player/Camera")
+tween_on_load = false
+
+[node name="Player" parent="." node_paths=PackedStringArray("Camera") instance=ExtResource("4_at5dv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.64919, 0)
+Camera = NodePath("../Camera")
+
+[node name="Plane" type="Node3D" parent="."]
+transform = Transform3D(500, 0, 0, 0, 1, 0, 0, 0, 500, 0, 0, 0)
+
+[node name="StaticBody" type="StaticBody3D" parent="Plane"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.86265e-09)
+
+[node name="Collider" type="CollisionShape3D" parent="Plane/StaticBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0338511, -0.5, -0.0228677)
+shape = SubResource("BoxShape3D_ajshl")
+
+[node name="Mesh" type="MeshInstance3D" parent="Plane"]
+material_override = SubResource("StandardMaterial3D_ghpyy")
+mesh = SubResource("PlaneMesh_44saj")
+skeleton = NodePath("")
+
+[node name="ye" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 20, 0, 0, 0, 1, 1.0434, 0.0875168, -5.6256)
+
+[node name="StaticBody" type="StaticBody3D" parent="ye"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.86265e-09)
+
+[node name="Collider" type="CollisionShape3D" parent="ye/StaticBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0338511, -0.199707, -0.0228677)
+shape = SubResource("BoxShape3D_j5jx5")
+
+[node name="Mesh" type="MeshInstance3D" parent="ye"]
+material_override = SubResource("StandardMaterial3D_ghpyy")
+mesh = SubResource("BoxMesh_lpvoh")
+skeleton = NodePath("")

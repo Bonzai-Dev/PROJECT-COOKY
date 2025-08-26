@@ -6,6 +6,7 @@ public partial class Player : Character {
   [Export] private float MouseSensitivity = 0.1f;
   [Export] private float GrabRange = 5f;
   [Export] private bool FreecamEnabled;
+  [Export] private CanvasLayer UserInterface;
   
   private Node3D head;
   private RayCast3D lookatRaycast;
@@ -13,11 +14,14 @@ public partial class Player : Character {
   private Vector2 mouseRotation;
   private RigidBody3D grabbedItem;
 
+  private RichTextLabel interactText;
+  
   public override void _Ready() {
     Input.SetMouseMode(Input.MouseModeEnum.Captured);
     head = GetNode<Node3D>("Head");
     lookatRaycast = head.GetNode<RayCast3D>("Lookat");
     lookatRaycast.AddException(this);
+    interactText = UserInterface.GetNode<RichTextLabel>("Interact");
   }
 
   public override void _Input(InputEvent @event) {
@@ -36,6 +40,14 @@ public partial class Player : Character {
   public override void _Process(double delta) {
     var rightDirection = Model.GlobalTransform.Basis.X.Normalized();
     var forwardDirection = Model.GlobalTransform.Basis.Z.Normalized();
+
+    if (ItemInSight() != null && grabbedItem == null) {
+      interactText.Visible = true;
+      interactText.Text = "Press e to " + "pickup " + ItemInSight().Name.ToString().ToLower();
+    }
+    else if (grabbedItem == null) {
+      interactText.Visible = false;
+    }
     
     mouseRotation = new Vector2(
       mouseRotation.X - mouseDelta.Y,
@@ -104,16 +116,21 @@ public partial class Player : Character {
 
   private void PickupItem(RigidBody3D item) {
     if (item == null) return;
+    GD.Print("Player grabbed ", item.Name);
+
     grabbedItem = item;
     grabbedItem.Rotation = new Vector3(0, Camera.Rotation.Y, 0);
     grabbedItem.AxisLockAngularX = true;
     grabbedItem.AxisLockAngularY = true;
     grabbedItem.AxisLockAngularZ = true;
-    GD.Print("Player grabbed ", item.Name);
+
+    interactText.Text = "Press e to " + "drop " + grabbedItem.Name.ToString().ToLower();
+    interactText.Visible = true;
   }
 
   private void DropItem() {
     GD.Print("Player dropped ", grabbedItem.Name);
+    interactText.Visible = false;
     grabbedItem.AxisLockAngularX = false;
     grabbedItem.AxisLockAngularY = false;
     grabbedItem.AxisLockAngularZ = false;

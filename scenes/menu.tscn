@@ -1,0 +1,153 @@
+[gd_scene load_steps=5 format=3 uid="uid://sjx44lns5y4f"]
+
+[ext_resource type="Shader" uid="uid://btopv6j7sreup" path="res://src/shaders/psx_style.gdshader" id="1_vjb58"]
+[ext_resource type="PackedScene" uid="uid://d0fg77y745e87" path="res://assets/nodes/cell.tscn" id="1_yqeox"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vjb58"]
+shader = ExtResource("1_vjb58")
+shader_parameter/ditherGamma = 1.0
+
+[sub_resource type="Environment" id="Environment_vjb58"]
+background_mode = 1
+background_color = Color(0.173816, 0.159927, 0.142513, 1)
+background_energy_multiplier = 4.39
+tonemap_mode = 3
+tonemap_exposure = 0.55
+tonemap_white = 5.4
+ssil_radius = 11.9
+ssil_intensity = 0.0
+sdfgi_bounce_feedback = 0.66
+sdfgi_cascades = 2
+sdfgi_max_distance = 51.2
+sdfgi_y_scale = 0
+sdfgi_energy = 0.34
+glow_enabled = true
+glow_levels/1 = 0.1
+glow_levels/4 = 0.38
+glow_levels/5 = 1.51
+glow_levels/6 = 2.27
+glow_intensity = 1.52
+glow_strength = 0.27
+glow_bloom = 1.0
+glow_blend_mode = 1
+glow_hdr_scale = 2.36
+
+[node name="Menu" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.999495, 0, -0.0317772, 0, 1, 0, 0.0317772, 0, -0.999495, 0, 1.06234, 1.82412)
+
+[node name="Screen" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 9.94
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="Screen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -46.0
+offset_top = 22.0
+offset_right = 42.0
+offset_bottom = 53.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "PLAY"
+icon_alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Screen"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.501
+anchor_top = 0.466
+anchor_right = 0.501
+anchor_bottom = 0.466
+offset_left = -120.64
+offset_top = -14.68
+offset_right = 120.36
+offset_bottom = 14.32
+grow_horizontal = 2
+grow_vertical = 2
+text = "COOKIES GAME"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Screen"]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="Screen/CanvasLayer"]
+material = SubResource("ShaderMaterial_vjb58")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WorldLight" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="WorldLight"]
+environment = SubResource("Environment_vjb58")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="WorldLight"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.739591, 5.83065, 4.62682)
+light_specular = 2.647
+spot_range = 8.28
+spot_attenuation = 1.26
+spot_angle = 127.71
+spot_angle_attenuation = 2.0
+
+[node name="SpotLight3D2" type="SpotLight3D" parent="WorldLight"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -1.26041, 5.83065, 4.62682)
+light_specular = 2.647
+spot_range = 8.28
+spot_attenuation = 1.26
+spot_angle = 127.71
+spot_angle_attenuation = 2.0
+
+[node name="SpotLight3D3" type="SpotLight3D" parent="WorldLight"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.739591, 5.83065, 1.12682)
+light_specular = 2.647
+spot_range = 8.28
+spot_attenuation = 1.26
+spot_angle = 127.71
+spot_angle_attenuation = 2.0
+
+[node name="SpotLight3D6" type="SpotLight3D" parent="WorldLight"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -1.26041, 5.83065, 1.12682)
+light_specular = 2.647
+spot_range = 8.28
+spot_attenuation = 1.26
+spot_angle = 127.71
+spot_angle_attenuation = 2.0
+
+[node name="SpotLight3D4" type="SpotLight3D" parent="WorldLight"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.739591, 5.83065, -1.37318)
+light_specular = 2.647
+spot_range = 8.28
+spot_attenuation = 1.26
+spot_angle = 127.71
+spot_angle_attenuation = 2.0
+
+[node name="SpotLight3D5" type="SpotLight3D" parent="WorldLight"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -1.26041, 5.83065, -1.37318)
+light_specular = 2.647
+spot_range = 8.28
+spot_attenuation = 1.26
+spot_angle = 127.71
+spot_angle_attenuation = 2.0
+
+[node name="OmniLight3D" type="OmniLight3D" parent="WorldLight"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.49756, 0)
+light_specular = 4.068
+omni_range = 8.568
+omni_attenuation = 1.149
+
+[node name="Cell" parent="." instance=ExtResource("1_yqeox")]
+transform = Transform3D(0.505, 0, 0, 0, 0.505, 0, 0, 0, 0.505, 0.0256228, 0.0178754, 0.00653768)

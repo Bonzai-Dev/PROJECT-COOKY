@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://d4b5fn3h24awp"]
+
+[ext_resource type="PackedScene" uid="uid://v0bmjfehcu42" path="res://assets/models/plate/plate.glb" id="1_twtfr"]
+[ext_resource type="PackedScene" uid="uid://c7yfyj0cxteus" path="res://assets/models/cookie/cookie.glb" id="2_grg3u"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_grg3u"]
+height = 0.07
+radius = 0.32
+
+[node name="CookiePlate" type="Node3D"]
+
+[node name="plate" parent="." instance=ExtResource("1_twtfr")]
+
+[node name="cookie" parent="." instance=ExtResource("2_grg3u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0666685, 0.0438087, -0.12285)
+
+[node name="cookie2" parent="." instance=ExtResource("2_grg3u")]
+transform = Transform3D(0.991393, 0.0899026, -0.0951685, -0.0947045, 0.994386, -0.0471955, 0.0903912, 0.0558022, 0.994342, 0.0881279, 0.0533409, -0.0502071)
+
+[node name="cookie3" parent="." instance=ExtResource("2_grg3u")]
+transform = Transform3D(0.98822, -0.151202, -0.0236421, 0.146159, 0.978262, -0.147111, 0.0453716, 0.141922, 0.988837, -0.0682015, 0.0546934, 0.0552375)
+
+[node name="cookie4" parent="." instance=ExtResource("2_grg3u")]
+transform = Transform3D(0.821392, 0.128872, 0.555615, 0.042893, 0.957424, -0.285481, -0.56875, 0.258323, 0.780892, 0.0780751, 0.0546934, 0.0893558)
+
+[node name="cookie5" parent="." instance=ExtResource("2_grg3u")]
+transform = Transform3D(1, 0, 0, 0, 0.994824, 0.101612, 0, -0.101612, 0.994824, -0.0205669, 0.0911465, -0.0343092)
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.042284, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+shape = SubResource("CylinderShape3D_grg3u")

@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://drm72chm0chpr"]
+
+[ext_resource type="PackedScene" uid="uid://c0353enqs4y3k" path="res://assets/models/matress.glb" id="1_8ry16"]
+[ext_resource type="PackedScene" uid="uid://j5jlxt3cobwj" path="res://assets/models/pillow.glb" id="2_8pjta"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8ry16"]
+size = Vector3(1.84, 0.195, 2.825)
+
+[node name="Matress" type="Node3D"]
+
+[node name="matress" parent="." instance=ExtResource("1_8ry16")]
+
+[node name="pillow" parent="." instance=ExtResource("2_8pjta")]
+transform = Transform3D(0.998049, 0, 0.0624421, 0, 1, 0, -0.0624421, 0, 0.998049, -0.0399956, 0.156467, -0.863467)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0102341, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0972617)
+shape = SubResource("BoxShape3D_8ry16")

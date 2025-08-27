@@ -1,13 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://sjx44lns5y4f"]
+[gd_scene load_steps=8 format=3 uid="uid://sjx44lns5y4f"]
 
-[ext_resource type="Shader" uid="uid://btopv6j7sreup" path="res://src/shaders/psx_style.gdshader" id="1_vjb58"]
+[ext_resource type="Shader" uid="uid://btopv6j7sreup" path="res://assets/shaders/psx_style.gdshader" id="1_vjb58"]
 [ext_resource type="PackedScene" uid="uid://d0fg77y745e87" path="res://assets/nodes/cell.tscn" id="1_yqeox"]
+[ext_resource type="Script" uid="uid://c47omfjm5pliu" path="res://src/Game.cs" id="5_mj5lg"]
+[ext_resource type="PackedScene" uid="uid://crho1x0n0ln2i" path="res://assets/nodes/radio.tscn" id="7_ufwb2"]
+[ext_resource type="PackedScene" uid="uid://drm72chm0chpr" path="res://assets/nodes/matress.tscn" id="8_6cdou"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vjb58"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tipki"]
 shader = ExtResource("1_vjb58")
 shader_parameter/ditherGamma = 1.0
 
-[sub_resource type="Environment" id="Environment_vjb58"]
+[sub_resource type="Environment" id="Environment_85g3d"]
 background_mode = 1
 background_color = Color(0.173816, 0.159927, 0.142513, 1)
 background_energy_multiplier = 4.39
@@ -32,122 +35,136 @@ glow_bloom = 1.0
 glow_blend_mode = 1
 glow_hdr_scale = 2.36
 
-[node name="Menu" type="Node3D"]
+[node name="Main" type="Node3D"]
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-0.999495, 0, -0.0317772, 0, 1, 0, 0.0317772, 0, -0.999495, 0, 1.06234, 1.82412)
+[node name="UI" type="CanvasLayer" parent="."]
 
-[node name="Screen" type="Control" parent="."]
-layout_mode = 3
+[node name="PSXShader" type="ColorRect" parent="UI"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_tipki")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 9.94
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
 
-[node name="Button" type="Button" parent="Screen"]
-layout_mode = 1
+[node name="Fade" type="ColorRect" parent="UI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+metadata/_edit_use_anchors_ = true
+
+[node name="Button" type="Button" parent="UI"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -46.0
-offset_top = 22.0
-offset_right = 42.0
-offset_bottom = 53.0
+offset_left = -131.5
+offset_top = -29.5
+offset_right = 131.5
+offset_bottom = 29.5
 grow_horizontal = 2
 grow_vertical = 2
 text = "PLAY"
-icon_alignment = 1
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Screen"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.501
-anchor_top = 0.466
-anchor_right = 0.501
-anchor_bottom = 0.466
-offset_left = -120.64
-offset_top = -14.68
-offset_right = 120.36
-offset_bottom = 14.32
-grow_horizontal = 2
-grow_vertical = 2
-text = "COOKIES GAME"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="Game" type="SubViewportContainer" parent="."]
+texture_filter = 1
+offset_right = 640.0
+offset_bottom = 480.0
+scale = Vector2(3, 3)
+script = ExtResource("5_mj5lg")
+metadata/_edit_use_anchors_ = true
 
-[node name="CanvasLayer" type="CanvasLayer" parent="Screen"]
-layer = -1
+[node name="CanvasModulate" type="CanvasModulate" parent="Game"]
+scale = Vector2(0.333333, 0.333333)
+color = Color(0.772247, 0.772247, 0.772247, 1)
 
-[node name="ColorRect" type="ColorRect" parent="Screen/CanvasLayer"]
-material = SubResource("ShaderMaterial_vjb58")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="SubViewport" type="SubViewport" parent="Game"]
+handle_input_locally = false
+anisotropic_filtering_level = 0
+fsr_sharpness = 0.0
+canvas_item_default_texture_filter = 0
+audio_listener_enable_3d = true
+physics_object_picking = true
+size = Vector2i(640, 360)
+render_target_update_mode = 4
 
-[node name="WorldLight" type="Node3D" parent="."]
+[node name="WorldLight" type="Node3D" parent="Game/SubViewport"]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="WorldLight"]
-environment = SubResource("Environment_vjb58")
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Game/SubViewport/WorldLight"]
+environment = SubResource("Environment_85g3d")
 
-[node name="SpotLight3D" type="SpotLight3D" parent="WorldLight"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.739591, 5.83065, 4.62682)
+[node name="SpotLight3D" type="SpotLight3D" parent="Game/SubViewport/WorldLight"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.739591, 7.83065, 4.62682)
 light_specular = 2.647
-spot_range = 8.28
+spot_range = 110.115
 spot_attenuation = 1.26
 spot_angle = 127.71
 spot_angle_attenuation = 2.0
 
-[node name="SpotLight3D2" type="SpotLight3D" parent="WorldLight"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -1.26041, 5.83065, 4.62682)
+[node name="SpotLight3D2" type="SpotLight3D" parent="Game/SubViewport/WorldLight"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -1.26041, 7.83065, 4.62682)
 light_specular = 2.647
-spot_range = 8.28
+spot_range = 110.115
 spot_attenuation = 1.26
 spot_angle = 127.71
 spot_angle_attenuation = 2.0
 
-[node name="SpotLight3D3" type="SpotLight3D" parent="WorldLight"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.739591, 5.83065, 1.12682)
+[node name="SpotLight3D3" type="SpotLight3D" parent="Game/SubViewport/WorldLight"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.739591, 7.83065, 1.12682)
 light_specular = 2.647
-spot_range = 8.28
+spot_range = 110.115
 spot_attenuation = 1.26
 spot_angle = 127.71
 spot_angle_attenuation = 2.0
 
-[node name="SpotLight3D6" type="SpotLight3D" parent="WorldLight"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -1.26041, 5.83065, 1.12682)
+[node name="SpotLight3D6" type="SpotLight3D" parent="Game/SubViewport/WorldLight"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -1.26041, 7.83065, 1.12682)
 light_specular = 2.647
-spot_range = 8.28
+spot_range = 110.115
 spot_attenuation = 1.26
 spot_angle = 127.71
 spot_angle_attenuation = 2.0
 
-[node name="SpotLight3D4" type="SpotLight3D" parent="WorldLight"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.739591, 5.83065, -1.37318)
+[node name="SpotLight3D4" type="SpotLight3D" parent="Game/SubViewport/WorldLight"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.739591, 7.83065, -1.37318)
 light_specular = 2.647
-spot_range = 8.28
+spot_range = 110.115
 spot_attenuation = 1.26
 spot_angle = 127.71
 spot_angle_attenuation = 2.0
 
-[node name="SpotLight3D5" type="SpotLight3D" parent="WorldLight"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -1.26041, 5.83065, -1.37318)
+[node name="SpotLight3D5" type="SpotLight3D" parent="Game/SubViewport/WorldLight"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -1.26041, 7.83065, -1.37318)
 light_specular = 2.647
-spot_range = 8.28
+spot_range = 110.115
 spot_attenuation = 1.26
 spot_angle = 127.71
 spot_angle_attenuation = 2.0
 
-[node name="OmniLight3D" type="OmniLight3D" parent="WorldLight"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.49756, 0)
+[node name="OmniLight3D" type="OmniLight3D" parent="Game/SubViewport/WorldLight"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.83212, 0)
 light_specular = 4.068
 omni_range = 8.568
 omni_attenuation = 1.149
 
-[node name="Cell" parent="." instance=ExtResource("1_yqeox")]
+[node name="Map" type="Node3D" parent="Game/SubViewport"]
+
+[node name="Cell" parent="Game/SubViewport/Map" instance=ExtResource("1_yqeox")]
 transform = Transform3D(0.505, 0, 0, 0, 0.505, 0, 0, 0, 0.505, 0.0256228, 0.0178754, 0.00653768)
+
+[node name="Radio" parent="Game/SubViewport/Map" instance=ExtResource("7_ufwb2")]
+transform = Transform3D(-0.928739, 0, -0.370735, 0, 1, 0, 0.370735, 0, -0.928739, -0.0967973, 0.394163, 5.36019)
+
+[node name="Matress" parent="Game/SubViewport/Map" instance=ExtResource("8_6cdou")]
+transform = Transform3D(-0.932884, 0, 0.360176, 0, 1, 0, -0.360176, 0, -0.932884, -1.51592, 0.150736, 4.49636)
+
+[node name="Camera3D" type="Camera3D" parent="Game/SubViewport"]
+transform = Transform3D(-0.913709, -0.0810172, 0.398212, -7.04496e-09, 0.979925, 0.199368, -0.40637, 0.182164, -0.895366, 0.135179, 1.18976, 2.58135)
+fov = 37.3

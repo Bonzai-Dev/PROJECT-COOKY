@@ -18,6 +18,7 @@ tween_resource = SubResource("Resource_yk7ts")
 metadata/_custom_type_script = "uid://csjccrhj5wnx7"
 
 [node name="RenderCamera" type="Camera3D" parent="."]
+fov = 80.0
 
 [node name="CameraHost" type="Node" parent="RenderCamera"]
 process_priority = 300

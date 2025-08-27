@@ -1,8 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://dq4vdkrbb66j"]
+[gd_scene load_steps=15 format=3 uid="uid://dq4vdkrbb66j"]
 
 [ext_resource type="PackedScene" uid="uid://dfixnhssifaui" path="res://assets/nodes/camera.tscn" id="1_0wfyh"]
 [ext_resource type="AudioStream" uid="uid://d3dx2i53c4bg1" path="res://assets/audio/noise.wav" id="1_o6xl0"]
-[ext_resource type="Shader" uid="uid://btopv6j7sreup" path="res://src/shaders/psx_style.gdshader" id="1_tbgi4"]
+[ext_resource type="Shader" uid="uid://btopv6j7sreup" path="res://assets/shaders/psx_style.gdshader" id="1_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://b52f84gna7qrn" path="res://assets/nodes/player.tscn" id="2_sugp2"]
 [ext_resource type="PackedScene" uid="uid://b33qpxjtsvfsb" path="res://assets/nodes/ui/pointer.tscn" id="2_tefeu"]
 [ext_resource type="FontFile" uid="uid://c8xuxw8egf2hh" path="res://assets/fonts/Micro_5/Micro5-Regular.ttf" id="4_85g3d"]
@@ -39,6 +39,16 @@ glow_bloom = 1.0
 glow_blend_mode = 1
 glow_hdr_scale = 2.36
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_tefeu"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o6xl0"]
+uv1_scale = Vector3(0.2, 0.2, 0.2)
+uv1_triplanar = true
+uv1_world_triplanar = true
+uv2_world_triplanar = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_tipki"]
+
 [node name="Main" type="Node3D"]
 
 [node name="Noise" type="AudioStreamPlayer" parent="."]
@@ -52,16 +62,7 @@ autoplay = true
 scale = Vector2(3, 3)
 size_flags_horizontal = 4
 size_flags_vertical = 6
-
-[node name="PSXShader" type="ColorRect" parent="UI"]
-show_behind_parent = true
-material = SubResource("ShaderMaterial_tipki")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
+metadata/_edit_use_anchors_ = true
 
 [node name="Interact" type="RichTextLabel" parent="UI"]
 anchors_preset = 12
@@ -75,16 +76,39 @@ grow_vertical = 0
 size_flags_horizontal = 4
 size_flags_vertical = 8
 theme_override_fonts/normal_font = ExtResource("4_85g3d")
-theme_override_font_sizes/normal_font_size = 96
+theme_override_font_sizes/normal_font_size = 71
 text = "PRESS E"
 horizontal_alignment = 1
 vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="PSXShader" type="ColorRect" parent="UI"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_tipki")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Fade" type="ColorRect" parent="UI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="Game" type="SubViewportContainer" parent="."]
 texture_filter = 1
 offset_right = 640.0
 offset_bottom = 480.0
 scale = Vector2(3, 3)
+metadata/_edit_use_anchors_ = true
 
 [node name="SubViewport" type="SubViewport" parent="Game"]
 handle_input_locally = false
@@ -97,15 +121,16 @@ size = Vector2i(640, 360)
 render_target_update_mode = 4
 
 [node name="Camera" parent="Game/SubViewport" node_paths=PackedStringArray("follow_target") instance=ExtResource("1_0wfyh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50517, 2.34904, 4.48896)
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, -7.90393, 2.34904, 4.48896)
 follow_target = NodePath("../Player/Head")
 tween_on_load = false
 
-[node name="Player" parent="Game/SubViewport" node_paths=PackedStringArray("Camera", "UserInterface") instance=ExtResource("2_sugp2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50517, 0.222886, 4.48896)
+[node name="Player" parent="Game/SubViewport" node_paths=PackedStringArray("Camera") instance=ExtResource("2_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.90393, 0.222886, 4.48896)
 Camera = NodePath("../Camera")
+SlideForce = 500.0
 GrabRange = 3.0
-UserInterface = NodePath("../../../UI")
+SlipAngle = 50.0
 JumpForce = 17.0
 
 [node name="WorldLight" type="Node3D" parent="Game/SubViewport"]
@@ -172,8 +197,23 @@ omni_attenuation = 1.149
 [node name="Cell" parent="Game/SubViewport/Map" instance=ExtResource("4_jyhfs")]
 transform = Transform3D(0.505, 0, 0, 0, 0.505, 0, 0, 0, 0.505, 0.0256228, 0.0178754, 0.00653768)
 
-[node name="Radio" parent="Game/SubViewport/Map" instance=ExtResource("7_o6xl0")]
-transform = Transform3D(-0.928739, 0, -0.370735, 0, 1, 0, 0.370735, 0, -0.928739, 1.42133, 0.394163, 5.4644)
-
 [node name="Matress" parent="Game/SubViewport/Map" instance=ExtResource("8_tipki")]
 transform = Transform3D(-0.932884, 0, 0.360176, 0, 1, 0, -0.360176, 0, -0.932884, -1.51592, 0.150736, 4.49636)
+
+[node name="Radio" parent="Game/SubViewport/Map" instance=ExtResource("7_o6xl0")]
+transform = Transform3D(-0.928739, 0, -0.370735, 0, 1, 0, 0.370735, 0, -0.928739, -0.0967973, 0.394163, 5.36019)
+
+[node name="Plane" type="Node3D" parent="."]
+transform = Transform3D(500, 0, 0, 0, 1, 0, 0, 0, 500, 0, 0, 0)
+
+[node name="StaticBody" type="StaticBody3D" parent="Plane"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.86265e-09)
+
+[node name="Collider" type="CollisionShape3D" parent="Plane/StaticBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0338511, -0.5, -0.0228677)
+shape = SubResource("BoxShape3D_tefeu")
+
+[node name="Mesh" type="MeshInstance3D" parent="Plane"]
+material_override = SubResource("StandardMaterial3D_o6xl0")
+mesh = SubResource("PlaneMesh_tipki")
+skeleton = NodePath("")

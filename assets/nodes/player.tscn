@@ -1,9 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://b52f84gna7qrn"]
+[gd_scene load_steps=8 format=3 uid="uid://b52f84gna7qrn"]
 
 [ext_resource type="PhysicsMaterial" uid="uid://d1ghpxv2it4lq" path="res://assets/physic_materials/player.tres" id="1_sysx0"]
 [ext_resource type="Script" uid="uid://ko15jvidrndq" path="res://src/Characters/Player.cs" id="1_wj3lj"]
+[ext_resource type="AudioStream" uid="uid://catgei4qpa6sn" path="res://assets/audio/footstep_reverb.wav" id="3_y07ac"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sysx0"]
+height = 2.6
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_y07ac"]
 
@@ -18,19 +20,26 @@ script = ExtResource("1_wj3lj")
 Model = NodePath("Model")
 GroundCheck = NodePath("GroundCheck")
 
+[node name="Footstep" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_y07ac")
+mix_target = 1
+
 [node name="Collider" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
 shape = SubResource("CapsuleShape3D_sysx0")
 
 [node name="Model" type="Node3D" parent="."]
 
 [node name="Bean" type="MeshInstance3D" parent="Model"]
 transform = Transform3D(1, 0, 0, 0, 1.3, 0, 0, 0, 1, 0, 1.3, 0)
+cast_shadow = 0
 gi_mode = 2
 mesh = SubResource("CapsuleMesh_y07ac")
 
 [node name="Glasses" type="MeshInstance3D" parent="Model"]
 transform = Transform3D(0.764798, 0, 0, 0, 0.141848, 0, 0, 0, 0.820248, 0, 2.09343, -0.123243)
+visible = false
+cast_shadow = 0
 gi_mode = 2
 mesh = SubResource("BoxMesh_tb2t1")
 

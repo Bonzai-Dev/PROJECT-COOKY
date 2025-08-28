@@ -20,6 +20,10 @@ public partial class Game : Node {
   public static Control GetUserInterface() {
     return userInterface;
   }
+
+  public static CanvasLayer GetHud() {
+    return hud;
+  }
   
   public static void FadeIn() {
     fadeScreenTween.TweenProperty(

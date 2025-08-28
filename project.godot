@@ -32,6 +32,7 @@ Game="*res://src/Game.cs"
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/mode=3
+window/size/initial_position=Vector2i(930, 0)
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 window/vsync/vsync_mode=2

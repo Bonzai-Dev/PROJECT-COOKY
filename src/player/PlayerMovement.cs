@@ -152,6 +152,14 @@ public partial class PlayerMovement : CharacterBody3D {
   // Get the gravity from the project settings to be synced with RigidBody nodes.
   public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
 
+  [ExportSubgroup("SFX")]
+  [Export] private AudioStreamPlayer3D outOfBreath;
+  private double staminaProgressTime;
+  private Tween staminaProgressTween;
+  private ProgressBar staminaProgressBar;
+  private float stamina = 100;
+  public float currentStamina { get; private set; }
+  
   public override void _Ready() {
     FSM = GetNode<GodotParadiseFiniteStateMachine>("FSM");
     _wallRunStateNode = (PlayerWallrun)FSM.GetStateByName("PlayerWallrun");
@@ -173,6 +181,9 @@ public partial class PlayerMovement : CharacterBody3D {
     // Events
     PlayerAir.PlayerLanded += ResetJumps;
 
+    staminaProgressBar = Game.GetHud().GetNode<ProgressBar>("Stamina");
+    SetStamina(stamina);
+    
     Game.FadeOut();
   }
 
@@ -216,6 +227,11 @@ public partial class PlayerMovement : CharacterBody3D {
     HandleFOV(delta);
 
     HandleLabels();
+
+    var weight = 1 - Mathf.Pow(1 - delta, 5);
+    staminaProgressBar.Value = Mathf.Lerp(staminaProgressBar.Value, currentStamina, weight);
+    if (staminaProgressBar.Value < currentStamina - 0.1f)
+      staminaProgressBar.Value = currentStamina;
   }
 
   private void RotatePlayer(float mouseX, float mouseY) {
@@ -464,6 +480,7 @@ public partial class PlayerMovement : CharacterBody3D {
     }
 
     _jumpsDone++;
+    RemoveStamina(jumpSpeed / 2);
   }
 
   public void WallJump(Vector3 wallDir) {
@@ -740,5 +757,29 @@ public partial class PlayerMovement : CharacterBody3D {
 
     _previousSprintAction = sprintAction;
     MoveAndSlide();
+
+    var movingSpeed = new Vector2(Velocity.X, Velocity.Z).Length();
+    if (movingSpeed > walkingSpeed && 
+        (FSM.CurrentState is PlayerSprint || FSM.CurrentState is PlayerWallrun || FSM.CurrentState is PlayerVerticalWallrun))
+      RemoveStamina(movingSpeed / 100);
+
+    if (currentStamina == 0 && !outOfBreath.Playing)
+      outOfBreath.Play();
+    else if (currentStamina > 0)
+      outOfBreath.Stop();
+  }
+
+  private void SetStamina(float amount) {
+    currentStamina = Mathf.Clamp(amount, 0, stamina);
+    GD.Print("Set stamina to ", currentStamina);
+  }
+
+  private void RemoveStamina(float amount) {
+    if (stamina == 0) return; 
+    SetStamina(currentStamina - amount);
+  }
+
+  private void AddStamina(float amount) {
+    SetStamina(currentStamina + amount);
   }
 }

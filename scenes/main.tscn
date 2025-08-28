@@ -1,10 +1,35 @@
-[gd_scene load_steps=11 format=3 uid="uid://dq4vdkrbb66j"]
+[gd_scene load_steps=13 format=3 uid="uid://dq4vdkrbb66j"]
 
 [ext_resource type="Shader" uid="uid://btopv6j7sreup" path="res://assets/shaders/psx_style.gdshader" id="1_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://b33qpxjtsvfsb" path="res://assets/nodes/ui/pointer.tscn" id="2_tefeu"]
+[ext_resource type="Shader" uid="uid://bdumqdwowpd02" path="res://assets/shaders/vhs.gdshader" id="3_tefeu"]
 [ext_resource type="FontFile" uid="uid://c8xuxw8egf2hh" path="res://assets/fonts/Micro_5/Micro5-Regular.ttf" id="4_85g3d"]
 [ext_resource type="Texture2D" uid="uid://bx3sq336tr7mn" path="res://assets/images/ac1379cc-16fa-407d-aa92-0b2b74a4e92b-2483615961.png" id="4_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://ddp62lqxgj3c2" path="res://assets/nodes/player.tscn" id="5_tipki"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tefeu"]
+shader = ExtResource("3_tefeu")
+shader_parameter/overlay = true
+shader_parameter/scanlines_opacity = 0.024
+shader_parameter/scanlines_width = 0.165
+shader_parameter/grille_opacity = 0.119
+shader_parameter/resolution = Vector2(8000, 6000)
+shader_parameter/pixelate = true
+shader_parameter/roll = true
+shader_parameter/roll_speed = 8.0
+shader_parameter/roll_size = 15.0
+shader_parameter/roll_variation = 0.584
+shader_parameter/distort_intensity = 0.025
+shader_parameter/noise_opacity = 0.4
+shader_parameter/noise_speed = 5.0
+shader_parameter/static_noise_intensity = 0.105
+shader_parameter/aberration = 0.015
+shader_parameter/brightness = 1.5
+shader_parameter/discolor = true
+shader_parameter/warp_amount = 0.25
+shader_parameter/clip_warp = false
+shader_parameter/vignette_intensity = 0.47
+shader_parameter/vignette_opacity = 0.387
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tipki"]
 shader = ExtResource("1_tbgi4")
@@ -22,21 +47,23 @@ albedo_texture = ExtResource("4_tbgi4")
 
 [node name="Main" type="Node3D"]
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Pointer" parent="UI" instance=ExtResource("2_tefeu")]
-scale = Vector2(3, 3)
-size_flags_horizontal = 4
-size_flags_vertical = 6
-metadata/_edit_use_anchors_ = true
+[node name="Hud" type="CanvasLayer" parent="UI"]
 
-[node name="Interact" type="RichTextLabel" parent="UI"]
+[node name="Interact" type="RichTextLabel" parent="UI/Hud"]
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -169.0
-offset_bottom = -90.0
+offset_top = -96.0
+offset_right = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_horizontal = 4
@@ -46,9 +73,49 @@ theme_override_font_sizes/normal_font_size = 71
 text = "PRESS E"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Fade" type="CanvasLayer" parent="UI/Hud"]
+layer = 2
+
+[node name="Fade" type="ColorRect" parent="UI/Hud/Fade"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Pointer" type="CanvasLayer" parent="UI/Hud"]
+layer = 3
+
+[node name="Fade" type="CanvasModulate" parent="UI/Hud/Pointer"]
+color = Color(0, 0, 0, 1)
+
+[node name="Pointer" parent="UI/Hud/Pointer" instance=ExtResource("2_tefeu")]
+scale = Vector2(3, 3)
+size_flags_horizontal = 4
+size_flags_vertical = 6
+
+[node name="PostProcessing" type="CanvasGroup" parent="UI"]
+
+[node name="VHS" type="CanvasLayer" parent="UI/PostProcessing"]
+layer = 3
+
+[node name="VHS" type="ColorRect" parent="UI/PostProcessing/VHS"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_tefeu")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="PSXShader" type="ColorRect" parent="UI"]
+[node name="PSXShader" type="CanvasLayer" parent="UI/PostProcessing"]
+
+[node name="PSXShader" type="ColorRect" parent="UI/PostProcessing/PSXShader"]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_tipki")
 anchors_preset = 15
@@ -59,36 +126,12 @@ grow_vertical = 2
 mouse_filter = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="Fade" type="ColorRect" parent="UI"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0, 0, 0, 1)
-metadata/_edit_use_anchors_ = true
-
 [node name="Game" type="SubViewportContainer" parent="."]
 texture_filter = 1
 offset_right = 640.0
 offset_bottom = 360.0
 scale = Vector2(3, 3)
 metadata/_edit_use_anchors_ = true
-
-[node name="ye2" type="Node3D" parent="Game"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.253266, -6.09049)
-
-[node name="StaticBody" type="StaticBody3D" parent="Game/ye2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.86265e-09)
-
-[node name="Collider" type="CollisionShape3D" parent="Game/ye2/StaticBody"]
-shape = SubResource("BoxShape3D_o6xl0")
-
-[node name="Mesh" type="MeshInstance3D" parent="Game/ye2"]
-material_override = SubResource("StandardMaterial3D_tipki")
-mesh = SubResource("BoxMesh_85g3d")
-skeleton = NodePath("")
 
 [node name="SubViewport" type="SubViewport" parent="Game"]
 handle_input_locally = false
@@ -99,6 +142,20 @@ audio_listener_enable_3d = true
 physics_object_picking = true
 size = Vector2i(640, 360)
 render_target_update_mode = 4
+
+[node name="ye3" type="Node3D" parent="Game/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.253266, -6.09049)
+
+[node name="StaticBody" type="StaticBody3D" parent="Game/SubViewport/ye3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.86265e-09)
+
+[node name="Collider" type="CollisionShape3D" parent="Game/SubViewport/ye3/StaticBody"]
+shape = SubResource("BoxShape3D_o6xl0")
+
+[node name="Mesh" type="MeshInstance3D" parent="Game/SubViewport/ye3"]
+material_override = SubResource("StandardMaterial3D_tipki")
+mesh = SubResource("BoxMesh_85g3d")
+skeleton = NodePath("")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Game/SubViewport"]
 transform = Transform3D(500, 0, 0, 0, 1, 0, 0, 0, 500, 0, -5.00071, 0)

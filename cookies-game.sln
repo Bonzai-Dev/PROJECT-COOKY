@@ -1,6 +1,6 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cookies-game", "cookies-game.csproj", "{EEE41A81-9C3C-455D-A69E-AA422952A6CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cookies-game", "cookies-game.csproj", "{3E8DE80F-82F1-4945-8186-1D78974D1EE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,11 +9,11 @@ Global
 	ExportRelease|Any CPU = ExportRelease|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EEE41A81-9C3C-455D-A69E-AA422952A6CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EEE41A81-9C3C-455D-A69E-AA422952A6CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EEE41A81-9C3C-455D-A69E-AA422952A6CC}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
-		{EEE41A81-9C3C-455D-A69E-AA422952A6CC}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
-		{EEE41A81-9C3C-455D-A69E-AA422952A6CC}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
-		{EEE41A81-9C3C-455D-A69E-AA422952A6CC}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+		{3E8DE80F-82F1-4945-8186-1D78974D1EE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E8DE80F-82F1-4945-8186-1D78974D1EE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E8DE80F-82F1-4945-8186-1D78974D1EE8}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{3E8DE80F-82F1-4945-8186-1D78974D1EE8}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{3E8DE80F-82F1-4945-8186-1D78974D1EE8}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{3E8DE80F-82F1-4945-8186-1D78974D1EE8}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
 	EndGlobalSection
 EndGlobal

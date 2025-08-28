@@ -1,95 +1,14 @@
-[gd_scene load_steps=11 format=3 uid="uid://co2aqyx3lct6b"]
+[gd_scene load_steps=5 format=3 uid="uid://co2aqyx3lct6b"]
 
-[ext_resource type="PackedScene" uid="uid://dfixnhssifaui" path="res://assets/nodes/camera.tscn" id="1_iyx0m"]
 [ext_resource type="PackedScene" uid="uid://b33qpxjtsvfsb" path="res://assets/nodes/ui/pointer.tscn" id="3_j5jx5"]
-[ext_resource type="PackedScene" uid="uid://b52f84gna7qrn" path="res://assets/nodes/player.tscn" id="4_at5dv"]
+[ext_resource type="Shader" uid="uid://btopv6j7sreup" path="res://assets/shaders/psx_style.gdshader" id="4_74lek"]
 [ext_resource type="FontFile" uid="uid://c8xuxw8egf2hh" path="res://assets/fonts/Micro_5/Micro5-Regular.ttf" id="4_lpvoh"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_ajshl"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_74lek"]
-albedo_color = Color(0.0505108, 0.0505108, 0.0505108, 1)
-uv1_scale = Vector3(0.2, 0.2, 0.2)
-uv1_triplanar = true
-uv1_world_triplanar = true
-uv2_world_triplanar = true
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_44saj"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_j5jx5"]
-size = Vector3(1, 1.60059, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ghpyy"]
-uv1_scale = Vector3(0.2, 0.2, 0.2)
-uv1_triplanar = true
-uv1_world_triplanar = true
-uv2_world_triplanar = true
-
-[sub_resource type="BoxMesh" id="BoxMesh_lpvoh"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j5jx5"]
+shader = ExtResource("4_74lek")
+shader_parameter/ditherGamma = 1.0
 
 [node name="Test" type="Node3D"]
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.701395, 0.712773, 0, -0.712773, 0.701395, -1.1418, 6.34516, -0.12027)
-shadow_enabled = true
-
-[node name="Camera" parent="." node_paths=PackedStringArray("follow_target") instance=ExtResource("1_iyx0m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.371308, 0)
-follow_target = NodePath("../Player")
-tween_on_load = false
-
-[node name="Player" parent="." node_paths=PackedStringArray("Camera") instance=ExtResource("4_at5dv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.371308, 0)
-Camera = NodePath("../Camera")
-SlideForce = 500.0
-Speed = 10.0
-Deceleration = 2.0
-SlipAngle = 50.0
-
-[node name="Plane" type="Node3D" parent="."]
-transform = Transform3D(500, 0, 0, 0, 1, 0, 0, 0, 500, 0, 0, 0)
-
-[node name="StaticBody" type="StaticBody3D" parent="Plane"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.86265e-09)
-
-[node name="Collider" type="CollisionShape3D" parent="Plane/StaticBody"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0338511, -0.5, -0.0228677)
-shape = SubResource("BoxShape3D_ajshl")
-
-[node name="Mesh" type="MeshInstance3D" parent="Plane"]
-material_override = SubResource("StandardMaterial3D_74lek")
-mesh = SubResource("PlaneMesh_44saj")
-skeleton = NodePath("")
-
-[node name="ye2" type="Node3D" parent="."]
-transform = Transform3D(41.0159, 0, 0, 0, 193.044, -0.875836, 0, 350.334, 0.48261, 5.47707, 1.83785, 7.23807)
-
-[node name="StaticBody" type="StaticBody3D" parent="ye2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.86265e-09)
-
-[node name="Collider" type="CollisionShape3D" parent="ye2/StaticBody"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0338511, -0.199707, -0.0228677)
-shape = SubResource("BoxShape3D_j5jx5")
-
-[node name="Mesh" type="MeshInstance3D" parent="ye2"]
-material_override = SubResource("StandardMaterial3D_ghpyy")
-mesh = SubResource("BoxMesh_lpvoh")
-skeleton = NodePath("")
-
-[node name="ye" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 20, 0, 0, 0, 1, 1.0434, 0.0875168, -5.6256)
-
-[node name="StaticBody" type="StaticBody3D" parent="ye"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.86265e-09)
-
-[node name="Collider" type="CollisionShape3D" parent="ye/StaticBody"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0338511, -0.199707, -0.0228677)
-shape = SubResource("BoxShape3D_j5jx5")
-
-[node name="Mesh" type="MeshInstance3D" parent="ye"]
-material_override = SubResource("StandardMaterial3D_ghpyy")
-mesh = SubResource("BoxMesh_lpvoh")
-skeleton = NodePath("")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -125,4 +44,15 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="PSXShader" type="ColorRect" parent="UI"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_j5jx5")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 metadata/_edit_use_anchors_ = true

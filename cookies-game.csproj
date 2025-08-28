@@ -5,6 +5,5 @@
     <RootNamespace>cookiesgame</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="src\shaders\*" />
   </ItemGroup>
 </Project>

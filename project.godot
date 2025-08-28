@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="cookies-game"
-run/main_scene="uid://co2aqyx3lct6b"
+run/main_scene="uid://dq4vdkrbb66j"
 config/features=PackedStringArray("4.4", "C#", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
@@ -19,10 +19,14 @@ boot_splash/fullsize=false
 boot_splash/use_filter=false
 config/icon="res://assets/icon.svg"
 
+[audio]
+
+buses/default_bus_layout="uid://nx4fkct4uure"
+
 [autoload]
 
-PhantomCameraManager="*res://addons/phantom_camera/scripts/managers/phantom_camera_manager.gd"
 Game="*res://src/Game.cs"
+PhantomCameraManager="*res://addons/phantom_camera/scripts/managers/phantom_camera_manager.gd"
 
 [display]
 
@@ -40,7 +44,7 @@ project/assembly_name="cookies-game"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/phantom_camera/plugin.cfg")
+enabled=PackedStringArray("res://addons/finite_state_machine/plugin.cfg", "res://addons/phantom_camera/plugin.cfg", "res://addons/spatial_audio_3d/plugin.cfg")
 
 [input]
 
@@ -90,6 +94,7 @@ crouch={
 3d/physics_engine="Jolt Physics"
 3d/default_gravity=15.0
 common/physics_interpolation=true
+3d/main_scene="res://scenes/main.tsc"
 
 [rendering]
 

@@ -1,13 +1,15 @@
-[gd_scene load_steps=17 format=3 uid="uid://dq4vdkrbb66j"]
+[gd_scene load_steps=20 format=3 uid="uid://dq4vdkrbb66j"]
 
-[ext_resource type="AudioStream" uid="uid://dp7onqf52nml3" path="res://assets/audio/vhs.wav" id="1_o6xl0"]
+[ext_resource type="AudioStream" uid="uid://dllmp753kkkwk" path="res://assets/audio/vhs_rewind.wav" id="1_85g3d"]
+[ext_resource type="Script" uid="uid://pulljrcsv312" path="res://src/SpawnPoints.cs" id="1_choun"]
+[ext_resource type="AudioStream" uid="uid://dp7onqf52nml3" path="res://assets/audio/vhs_play.wav" id="1_o6xl0"]
 [ext_resource type="Shader" uid="uid://btopv6j7sreup" path="res://assets/shaders/psx_style.gdshader" id="1_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://b33qpxjtsvfsb" path="res://assets/nodes/ui/pointer.tscn" id="2_tefeu"]
 [ext_resource type="Shader" uid="uid://bdumqdwowpd02" path="res://assets/shaders/vhs.gdshader" id="3_tefeu"]
 [ext_resource type="FontFile" uid="uid://c8xuxw8egf2hh" path="res://assets/fonts/Micro_5/Micro5-Regular.ttf" id="4_85g3d"]
-[ext_resource type="Texture2D" uid="uid://bx3sq336tr7mn" path="res://assets/images/ac1379cc-16fa-407d-aa92-0b2b74a4e92b-2483615961.png" id="4_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://ddp62lqxgj3c2" path="res://assets/nodes/player.tscn" id="5_tipki"]
 [ext_resource type="PackedScene" uid="uid://d4b5fn3h24awp" path="res://assets/nodes/cookie_plate.tscn" id="8_tipki"]
+[ext_resource type="Shader" uid="uid://c0xwjqvup71wv" path="res://assets/shaders/radial_blur.gdshader" id="8_ya4ey"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o6xl0"]
 bg_color = Color(0.543157, 0.314192, 3.85046e-07, 1)
@@ -51,22 +53,35 @@ shader_parameter/vignette_opacity = 0.387
 shader = ExtResource("1_tbgi4")
 shader_parameter/ditherGamma = 1.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_choun"]
+shader = ExtResource("8_ya4ey")
+shader_parameter/blur_center = Vector2(0.5, 0.5)
+shader_parameter/blur_power = 0.0
+shader_parameter/sampling_count = 10
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tefeu"]
-albedo_texture = ExtResource("4_tbgi4")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_o6xl0"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tipki"]
-albedo_texture = ExtResource("4_tbgi4")
 
 [sub_resource type="BoxMesh" id="BoxMesh_85g3d"]
 
 [node name="Main" type="Node3D"]
 
+[node name="VHSRewind" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("1_85g3d")
+
 [node name="VHSStart" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("1_o6xl0")
 volume_db = 2.0
 autoplay = true
+
+[node name="SpawnPoints" type="Node3D" parent="." node_paths=PackedStringArray("SpawningPoints")]
+script = ExtResource("1_choun")
+SpawningPoints = [NodePath("1")]
+
+[node name="1" type="Node3D" parent="SpawnPoints"]
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3
@@ -83,8 +98,9 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -96.0
+offset_top = -134.0
 offset_right = 1.0
+offset_bottom = -38.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_horizontal = 4
@@ -162,6 +178,19 @@ grow_vertical = 2
 mouse_filter = 2
 metadata/_edit_use_anchors_ = true
 
+[node name="RadialBlur" type="CanvasLayer" parent="UI/PostProcessing"]
+
+[node name="RadialBlur" type="ColorRect" parent="UI/PostProcessing/RadialBlur"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_choun")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
+
 [node name="Game" type="SubViewportContainer" parent="."]
 texture_filter = 1
 offset_right = 640.0
@@ -169,7 +198,7 @@ offset_bottom = 360.0
 scale = Vector2(3, 3)
 metadata/_edit_use_anchors_ = true
 
-[node name="SubViewport" type="SubViewport" parent="Game"]
+[node name="GameViewport" type="SubViewport" parent="Game"]
 handle_input_locally = false
 anisotropic_filtering_level = 0
 fsr_sharpness = 0.0
@@ -179,46 +208,47 @@ physics_object_picking = true
 size = Vector2i(640, 360)
 render_target_update_mode = 4
 
-[node name="CSGBox3D" type="CSGBox3D" parent="Game/SubViewport"]
+[node name="CookyPlate" parent="Game/GameViewport" instance=ExtResource("8_tipki")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.918744, -4.31607, -15.5055)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Game/GameViewport"]
 transform = Transform3D(500, 0, 0, 0, 1, 0, 0, 0, 500, 0, -5.00071, 0)
 material_override = SubResource("StandardMaterial3D_tefeu")
 use_collision = true
+collision_layer = 3
 
-[node name="CSGBox3D2" type="CSGBox3D" parent="Game/SubViewport"]
+[node name="CSGBox3D2" type="CSGBox3D" parent="Game/GameViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.29044, -24.904)
 material_override = SubResource("StandardMaterial3D_tefeu")
 use_collision = true
-collision_layer = 2
+collision_layer = 3
 size = Vector3(500, 500, 1)
 
-[node name="CSGBox3D3" type="CSGBox3D" parent="Game/SubViewport"]
+[node name="CSGBox3D3" type="CSGBox3D" parent="Game/GameViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -266.562, -4.29044, -21.9633)
 material_override = SubResource("StandardMaterial3D_tefeu")
 use_collision = true
-collision_layer = 2
+collision_layer = 3
 size = Vector3(500, 500, 1)
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Game/SubViewport"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Game/GameViewport"]
 transform = Transform3D(1, 0, 0, 0, 0.701395, 0.712773, 0, -0.712773, 0.701395, -1.1418, 6.34516, -0.12027)
 shadow_enabled = true
 
-[node name="Player" parent="Game/SubViewport" instance=ExtResource("5_tipki")]
+[node name="Player" parent="Game/GameViewport" instance=ExtResource("5_tipki")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.78601, -4.48831, -8.23184)
 
-[node name="ye2" type="Node3D" parent="Game/SubViewport"]
+[node name="ye2" type="Node3D" parent="Game/GameViewport"]
 transform = Transform3D(41.0159, 0, 0, 0, 193.044, -0.875836, 0, 350.334, 0.48261, 5.47707, 1.83785, 7.23807)
 
-[node name="StaticBody" type="StaticBody3D" parent="Game/SubViewport/ye2"]
+[node name="StaticBody" type="StaticBody3D" parent="Game/GameViewport/ye2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.86265e-09)
 
-[node name="Collider" type="CollisionShape3D" parent="Game/SubViewport/ye2/StaticBody"]
+[node name="Collider" type="CollisionShape3D" parent="Game/GameViewport/ye2/StaticBody"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0338511, -0.199707, -0.0228677)
 shape = SubResource("BoxShape3D_o6xl0")
 
-[node name="Mesh" type="MeshInstance3D" parent="Game/SubViewport/ye2"]
+[node name="Mesh" type="MeshInstance3D" parent="Game/GameViewport/ye2"]
 material_override = SubResource("StandardMaterial3D_tipki")
 mesh = SubResource("BoxMesh_85g3d")
 skeleton = NodePath("")
-
-[node name="CookiePlate" parent="." instance=ExtResource("8_tipki")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.39291, -3.37968, -15.7187)

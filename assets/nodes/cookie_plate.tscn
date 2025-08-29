@@ -4,12 +4,13 @@
 [ext_resource type="PackedScene" uid="uid://c7yfyj0cxteus" path="res://assets/models/cookie/cookie.glb" id="2_grg3u"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_grg3u"]
-height = 0.07
-radius = 0.32
+height = 0.064
+radius = 0.322
 
-[node name="CookiePlate" type="Node3D"]
+[node name="CookyPlate" type="RigidBody3D"]
 
 [node name="Cookies" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.042284, 0)
 
 [node name="cookie" parent="Cookies" instance=ExtResource("2_grg3u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0666685, 0.0438087, -0.12285)
@@ -27,9 +28,7 @@ transform = Transform3D(0.821392, 0.128872, 0.555615, 0.042893, 0.957424, -0.285
 transform = Transform3D(1, 0, 0, 0, 0.994824, 0.101612, 0, -0.101612, 0.994824, -0.0205669, 0.0911465, -0.0343092)
 
 [node name="plate" parent="." instance=ExtResource("1_twtfr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.042284, 0)
 
-[node name="RigidBody3D" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.042284, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CylinderShape3D_grg3u")

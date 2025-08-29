@@ -10,9 +10,7 @@ public partial class PlayerSprint : PlayerMovementState {
 
     Movement.currentSpeed =
       Mathf.MoveToward(Movement.currentSpeed, desiredSpeed, Movement.accelerationRate * (float)delta);
-
-    Movement.currentSpeed =
-      Mathf.Clamp(Movement.currentSpeed, Movement.sprintingSpeed, Movement.maxSpeed + Movement.momentum);
+    Movement.currentSpeed = Mathf.Clamp(Movement.currentSpeed, Movement.sprintingSpeed, Movement.maxSpeed + Movement.momentum);
 
     if (Input.IsActionPressed("crouch") && !Movement.IsOnWall() && !Movement.IsRunningUpSlope() &&
         !Movement.stepCast.IsColliding()

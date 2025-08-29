@@ -1,4 +1,4 @@
-[gd_scene load_steps=169 format=4 uid="uid://ddp62lqxgj3c2"]
+[gd_scene load_steps=170 format=4 uid="uid://ddp62lqxgj3c2"]
 
 [ext_resource type="Script" uid="uid://blw2gamnaaylg" path="res://src/player/PlayerMovement.cs" id="1_1x2u3"]
 [ext_resource type="Script" uid="uid://ctggvwrmw1jmx" path="res://addons/finite_state_machine/GodotParadiseFiniteStateMachine.cs" id="2_gl0jx"]
@@ -45,6 +45,7 @@
 [ext_resource type="Texture2D" uid="uid://cnppyinv85gxd" path="res://assets/images/smoke_01.png" id="36_hv26i"]
 [ext_resource type="AudioStream" uid="uid://sl63oq587wq7" path="res://assets/audio/player_movement/WallRun_04.wav" id="36_pvb8y"]
 [ext_resource type="Script" uid="uid://bkqe0oka6thiy" path="res://src/player/NewStepper.cs" id="38_kln8r"]
+[ext_resource type="AudioStream" uid="uid://dm6wtoii1ky4b" path="res://assets/audio/eating_cooky.wav" id="42_sr6k4"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yih85"]
 custom_solver_bias = 0.1
@@ -972,7 +973,7 @@ font = SubResource("SystemFont_36c0q")
 font_size = 45
 outline_color = Color(0, 0, 0, 1)
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("_resetPosition", "_standingCollider", "_animator", "_crouchingCollider", "ceilingRay", "_vaultRay", "_vaultCheck", "_vaultCast", "stepCast", "_camera", "_speedLabel", "_momentumLabel", "_stateLabel", "_animationLabel", "_desiredSpeedLabel", "_previousStateLabel", "outOfBreath")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("_resetPosition", "_standingCollider", "_animator", "_crouchingCollider", "ceilingRay", "_vaultRay", "_vaultCheck", "_vaultCast", "stepCast", "_camera", "_speedLabel", "_momentumLabel", "_stateLabel", "_animationLabel", "_desiredSpeedLabel", "_previousStateLabel", "outOfBreath", "eatingCooky", "lookatRaycast")]
 collision_mask = 15
 floor_max_angle = 1.13446
 floor_snap_length = 0.3
@@ -1016,6 +1017,8 @@ _animationLabel = NodePath("MovementInfo/CanvasGroup/CanvasLayer/Animation")
 _desiredSpeedLabel = NodePath("MovementInfo/CanvasGroup/CanvasLayer/Desired Speed")
 _previousStateLabel = NodePath("MovementInfo/CanvasGroup/CanvasLayer/Previous State")
 outOfBreath = NodePath("PlayerAudio/OutOfBreath")
+eatingCooky = NodePath("PlayerAudio/Eating")
+lookatRaycast = NodePath("Mesh/Neck/Head/Eyes/CamHead/CameraShaker/Camera3D/LookAt")
 
 [node name="FSM" type="Node" parent="." node_paths=PackedStringArray("CurrentState")]
 script = ExtResource("2_gl0jx")
@@ -1341,9 +1344,15 @@ unit_size = 5.0
 emission_angle_filter_attenuation_db = -9.5
 attenuation_filter_cutoff_hz = 20500.0
 
+[node name="Eating" type="AudioStreamPlayer3D" parent="PlayerAudio"]
+stream = ExtResource("42_sr6k4")
+volume_db = 1.5
+max_db = 6.0
+bus = &"Movement"
+
 [node name="OutOfBreath" type="AudioStreamPlayer3D" parent="PlayerAudio"]
 stream = SubResource("AudioStreamWAV_40t3s")
-volume_db = 6.0
+volume_db = 5.0
 max_db = 6.0
 bus = &"Movement"
 
@@ -1429,7 +1438,6 @@ parameters/moveState/wallrun/conditions/left_wallrun = false
 parameters/moveState/wallrun/conditions/right_wallrun = false
 
 [node name="MovementInfo" type="Control" parent="."]
-visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0

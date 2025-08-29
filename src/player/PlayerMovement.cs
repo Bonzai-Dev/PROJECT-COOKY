@@ -45,7 +45,7 @@ public partial class PlayerMovement : CharacterBody3D {
   public Vector2 inputDirection = Vector2.Zero;
   public Vector3 lastVelocity = Vector3.Zero;
   public Vector3 playerVelocity = Vector3.Zero;
-
+  
   // private rotations
   private float _rotationX = 0f;
   private float _rotationZ = 0f;
@@ -152,13 +152,18 @@ public partial class PlayerMovement : CharacterBody3D {
   // Get the gravity from the project settings to be synced with RigidBody nodes.
   public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
 
-  [ExportSubgroup("SFX")]
+  [ExportSubgroup("Game stuff")]
   [Export] private AudioStreamPlayer3D outOfBreath;
+  [Export] private AudioStreamPlayer3D eatingCooky;
+  [Export] private RayCast3D lookatRaycast;
+  private RichTextLabel interactLabel;
+  private ShaderMaterial radialBlurShader;
   private double staminaProgressTime;
   private Tween staminaProgressTween;
   private ProgressBar staminaProgressBar;
   private float stamina = 100;
-  public float currentStamina { get; private set; }
+  private float defaultMaxSpeed;
+  public float currentStamina;
   
   public override void _Ready() {
     FSM = GetNode<GodotParadiseFiniteStateMachine>("FSM");
@@ -181,6 +186,11 @@ public partial class PlayerMovement : CharacterBody3D {
     // Events
     PlayerAir.PlayerLanded += ResetJumps;
 
+    var radialBlurColorRect = Game.GetPostProcessingEffects().GetNode<ColorRect>("RadialBlur/RadialBlur");
+    radialBlurShader = (ShaderMaterial)radialBlurColorRect.GetMaterial();
+    
+    defaultMaxSpeed = maxSpeed;
+    interactLabel = Game.GetHud().GetNode<RichTextLabel>("Interact");
     staminaProgressBar = Game.GetHud().GetNode<ProgressBar>("Stamina");
     SetStamina(stamina);
     
@@ -216,6 +226,7 @@ public partial class PlayerMovement : CharacterBody3D {
     }
   }
 
+  private double targetBlur;
   public override void _Process(double delta) {
     HandleZRotation((float)delta);
 
@@ -232,6 +243,38 @@ public partial class PlayerMovement : CharacterBody3D {
     staminaProgressBar.Value = Mathf.Lerp(staminaProgressBar.Value, currentStamina, weight);
     if (staminaProgressBar.Value < currentStamina - 0.1f)
       staminaProgressBar.Value = currentStamina;
+
+    if (Input.IsActionJustPressed("rewind"))
+      Game.RestartLevel();
+    
+    if (ItemInSight() != null && ItemInSight().Name == "CookyPlate") {
+      interactLabel.Text = "PRESS E TO EAT COOKY";
+      interactLabel.Visible = true;
+      
+      if (Input.IsActionJustPressed("eat")) {
+        ItemInSight().GetNode<Node3D>("Cookies").Free();
+        ItemInSight().Name = "EmptyPlate";
+        eatingCooky.Play();
+        AddStamina(25 + GD.RandRange(-5, 5));
+        interactLabel.Visible = false;
+      }
+    }
+    else if (ItemInSight() == null) {
+      interactLabel.Visible = false;
+    }
+    
+    if (currentStamina == 0) {
+      if (!outOfBreath.Playing)
+        outOfBreath.Play();
+
+      targetBlur = Mathf.Lerp(targetBlur, 0.025f, delta * 2);
+    }
+    else if (currentStamina > 0) {
+      outOfBreath.Stop();
+      targetBlur = Mathf.Lerp(targetBlur, 0, delta);
+    }
+    
+    radialBlurShader.SetShaderParameter("blur_power", targetBlur);
   }
 
   private void RotatePlayer(float mouseX, float mouseY) {
@@ -339,7 +382,8 @@ public partial class PlayerMovement : CharacterBody3D {
                                                                               FSM.CurrentState is PlayerCrouch) &&
                                                               Velocity.Length() > 0.1f);
 
-      _animator.Set("parameters/moveState/conditions/jump", (Input.IsActionJustPressed("movement_jump") &&
+      _animator.Set("parameters/moveState/conditions/jump", currentStamina > 0 && 
+                                                            (Input.IsActionJustPressed("movement_jump") &&
                                                              airTime < _coyoteTime &&
                                                              _jumpsDone < _jumps && !ceilingRay.IsColliding() &&
                                                              (!stepCast.IsColliding()
@@ -480,7 +524,7 @@ public partial class PlayerMovement : CharacterBody3D {
     }
 
     _jumpsDone++;
-    RemoveStamina(jumpSpeed / 2);
+    RemoveStamina(jumpSpeed);
   }
 
   public void WallJump(Vector3 wallDir) {
@@ -637,7 +681,7 @@ public partial class PlayerMovement : CharacterBody3D {
 
     sprintAction = _previousSprintAction;
 
-    if (IsOnFloor())
+    if (IsOnFloor() && currentStamina > 0)
       sprintAction = !Input.IsActionPressed("sprint");
 
     // Handle free looking
@@ -722,7 +766,6 @@ public partial class PlayerMovement : CharacterBody3D {
 
     playerVelocity = Velocity;
 
-
     if (IsOnFloor()) {
       direction = direction.Lerp((Transform.Basis * new Vector3(inputDir.X, 0f, inputDir.Y)).Normalized(),
         1.0f - Mathf.Pow(0.5f, (float)delta * lerpSpeed));
@@ -738,7 +781,7 @@ public partial class PlayerMovement : CharacterBody3D {
       }
     }
 
-    if (FSM.CurrentState is not PlayerVault && FSM.CurrentState is not PlayerWallrun)
+    if (FSM.CurrentState is not PlayerVault && FSM.CurrentState is not PlayerWallrun && currentStamina > 0)
       HandleJump(_jumpVelocity);
 
     if (direction != Vector3.Zero) {
@@ -755,18 +798,16 @@ public partial class PlayerMovement : CharacterBody3D {
     _lastPhysicsPos = GlobalTransform.Origin;
     lastVelocity = playerVelocity;
 
-    _previousSprintAction = sprintAction;
-    MoveAndSlide();
-
     var movingSpeed = new Vector2(Velocity.X, Velocity.Z).Length();
     if (movingSpeed > walkingSpeed && 
         (FSM.CurrentState is PlayerSprint || FSM.CurrentState is PlayerWallrun || FSM.CurrentState is PlayerVerticalWallrun))
       RemoveStamina(movingSpeed / 100);
 
-    if (currentStamina == 0 && !outOfBreath.Playing)
-      outOfBreath.Play();
-    else if (currentStamina > 0)
-      outOfBreath.Stop();
+    if (Velocity.Length() > walkingSpeed && currentStamina == 0)
+      sprintAction = false;
+    
+    _previousSprintAction = sprintAction;
+    MoveAndSlide();
   }
 
   private void SetStamina(float amount) {
@@ -781,5 +822,10 @@ public partial class PlayerMovement : CharacterBody3D {
 
   private void AddStamina(float amount) {
     SetStamina(currentStamina + amount);
+  }
+  
+  private RigidBody3D ItemInSight() {
+    if (lookatRaycast.GetCollider() is RigidBody3D item) return item;
+    return null;
   }
 }

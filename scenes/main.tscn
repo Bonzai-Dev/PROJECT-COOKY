@@ -133,7 +133,6 @@ fill_mode = 1
 
 [node name="Fade" type="CanvasLayer" parent="UI/Hud"]
 layer = 2
-visible = false
 
 [node name="Fade" type="ColorRect" parent="UI/Hud/Fade"]
 anchors_preset = 15
@@ -232,9 +231,6 @@ physics_object_picking = true
 size = Vector2i(640, 360)
 render_target_update_mode = 4
 
-[node name="Platforms" parent="Game/GameViewport" instance=ExtResource("11_ya4ey")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
-
 [node name="CookyPlate" parent="Game/GameViewport" instance=ExtResource("8_tipki")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.918744, -4.31607, -15.5055)
 
@@ -244,3 +240,6 @@ shadow_enabled = true
 
 [node name="Player" parent="Game/GameViewport" instance=ExtResource("5_tipki")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.11481, 47.9872, 102.646)
+
+[node name="Platforms" parent="." instance=ExtResource("11_ya4ey")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)

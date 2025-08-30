@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dsstvi8rl4pt4"]
+[gd_scene load_steps=20 format=3 uid="uid://dsstvi8rl4pt4"]
 
 [ext_resource type="AudioStream" uid="uid://dllmp753kkkwk" path="res://assets/audio/vhs_rewind.wav" id="1_yk7ts"]
 [ext_resource type="AudioStream" uid="uid://dp7onqf52nml3" path="res://assets/audio/vhs_play.wav" id="2_ajshl"]
@@ -11,6 +11,7 @@
 [ext_resource type="Material" uid="uid://dxrlqf4bf2xx4" path="res://assets/materials/prototype_white.tres" id="9_ff6ho"]
 [ext_resource type="PackedScene" uid="uid://ddp62lqxgj3c2" path="res://assets/nodes/player.tscn" id="10_7yos8"]
 [ext_resource type="Script" uid="uid://b6c2fmpxsthec" path="res://src/JumpPad.cs" id="10_ajshl"]
+[ext_resource type="Material" uid="uid://bfpqo14byc3f1" path="res://assets/materials/prototype_orange.tres" id="10_ghpyy"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_efxa6"]
 bg_color = Color(0.543157, 0.314192, 3.85046e-07, 1)
@@ -211,8 +212,8 @@ material_override = ExtResource("9_ff6ho")
 use_collision = true
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="Game/GameViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.79387, -4.51043, -11.8614)
-material_override = ExtResource("9_ff6ho")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.79387, -2.87136, -11.8614)
+material_override = ExtResource("10_ghpyy")
 use_collision = true
 collision_layer = 2
 size = Vector3(10, 1, 10)

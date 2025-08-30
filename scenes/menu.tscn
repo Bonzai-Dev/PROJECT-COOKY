@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=3 uid="uid://sjx44lns5y4f"]
 
-[ext_resource type="Shader" uid="uid://btopv6j7sreup" path="res://assets/shaders/psx_style.gdshader" id="1_vjb58"]
+[ext_resource type="Shader" uid="uid://btopv6j7sreup" path="res://assets/shaders/postprocessing/psx_style.gdshader" id="1_vjb58"]
 [ext_resource type="PackedScene" uid="uid://d0fg77y745e87" path="res://assets/nodes/cell.tscn" id="1_yqeox"]
-[ext_resource type="Script" uid="uid://c47omfjm5pliu" path="res://src/Game.cs" id="5_mj5lg"]
+[ext_resource type="Script" uid="uid://bfugf854c05le" path="res://src/Game.cs" id="5_mj5lg"]
 [ext_resource type="PackedScene" uid="uid://crho1x0n0ln2i" path="res://assets/nodes/radio.tscn" id="7_ufwb2"]
 [ext_resource type="PackedScene" uid="uid://drm72chm0chpr" path="res://assets/nodes/matress.tscn" id="8_6cdou"]
 

@@ -15,7 +15,7 @@ public partial class Game : Node {
   private static uint currentLevel = 1;
   
   private static PlayerMovement player;
-  private static SpawnPoints spawnPoints;
+  private static Node3D spawnPoint;
   
   private static AudioStreamPlayer vhsStart;
   private static AudioStreamPlayer vhsRewind;
@@ -29,7 +29,7 @@ public partial class Game : Node {
     postProcessingEffects = userInterface.GetNode<CanvasGroup>("PostProcessing");
     
     player = gameViewport.GetNode<PlayerMovement>("Player");
-    spawnPoints = GetTree().CurrentScene.GetNode<SpawnPoints>("SpawnPoints");
+    spawnPoint = GetTree().CurrentScene.GetNode<Node3D>("SpawnPoint");
 
     vhsStart = GetTree().CurrentScene.GetNode<AudioStreamPlayer>("VHSStart");
     vhsRewind = GetTree().CurrentScene.GetNode<AudioStreamPlayer>("VHSRewind");
@@ -74,7 +74,7 @@ public partial class Game : Node {
     vhsRewind.Play();
     FadeIn(2);
     fadeScreenTween.TweenCallback(Callable.From(() => {
-      player.Position = spawnPoints.SpawningPoints[0].Position;
+      player.Position = spawnPoint.Position;
       vhsStart.Play(); 
       FadeOut();
     }));

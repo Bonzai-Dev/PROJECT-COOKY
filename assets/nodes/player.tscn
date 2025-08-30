@@ -1,4 +1,4 @@
-[gd_scene load_steps=170 format=4 uid="uid://ddp62lqxgj3c2"]
+[gd_scene load_steps=172 format=4 uid="uid://ddp62lqxgj3c2"]
 
 [ext_resource type="Script" uid="uid://blw2gamnaaylg" path="res://src/player/PlayerMovement.cs" id="1_1x2u3"]
 [ext_resource type="Script" uid="uid://ctggvwrmw1jmx" path="res://addons/finite_state_machine/GodotParadiseFiniteStateMachine.cs" id="2_gl0jx"]
@@ -46,6 +46,7 @@
 [ext_resource type="AudioStream" uid="uid://sl63oq587wq7" path="res://assets/audio/player_movement/WallRun_04.wav" id="36_pvb8y"]
 [ext_resource type="Script" uid="uid://bkqe0oka6thiy" path="res://src/player/NewStepper.cs" id="38_kln8r"]
 [ext_resource type="AudioStream" uid="uid://dm6wtoii1ky4b" path="res://assets/audio/eating_cooky.wav" id="42_sr6k4"]
+[ext_resource type="AudioStream" uid="uid://babc8suoqod5" path="res://assets/audio/jump_pad.wav" id="43_6bub7"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yih85"]
 custom_solver_bias = 0.1
@@ -608,6 +609,9 @@ turbulence_influence_min = 0.01
 turbulence_influence_max = 0.03
 turbulence_influence_over_life = SubResource("CurveTexture_cc8b5")
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_sr6k4"]
+radius = 0.28
+
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kvqnj"]
 radius = 0.225
 
@@ -973,7 +977,7 @@ font = SubResource("SystemFont_36c0q")
 font_size = 45
 outline_color = Color(0, 0, 0, 1)
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("_resetPosition", "_standingCollider", "_animator", "_crouchingCollider", "ceilingRay", "_vaultRay", "_vaultCheck", "_vaultCast", "stepCast", "_camera", "_speedLabel", "_momentumLabel", "_stateLabel", "_animationLabel", "_desiredSpeedLabel", "_previousStateLabel", "outOfBreath", "eatingCooky", "lookatRaycast")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("_resetPosition", "_standingCollider", "_animator", "_crouchingCollider", "ceilingRay", "_vaultRay", "_vaultCheck", "_vaultCast", "stepCast", "_camera", "_speedLabel", "_momentumLabel", "_stateLabel", "_animationLabel", "_desiredSpeedLabel", "_previousStateLabel", "outOfBreath", "eatingCooky", "jumpPadSound", "lookatRaycast", "groundCast")]
 collision_mask = 15
 floor_max_angle = 1.13446
 floor_snap_length = 0.3
@@ -1018,7 +1022,9 @@ _desiredSpeedLabel = NodePath("MovementInfo/CanvasGroup/CanvasLayer/Desired Spee
 _previousStateLabel = NodePath("MovementInfo/CanvasGroup/CanvasLayer/Previous State")
 outOfBreath = NodePath("PlayerAudio/OutOfBreath")
 eatingCooky = NodePath("PlayerAudio/Eating")
+jumpPadSound = NodePath("PlayerAudio/JumpPad")
 lookatRaycast = NodePath("Mesh/Neck/Head/Eyes/CamHead/CameraShaker/Camera3D/LookAt")
+groundCast = NodePath("GroundCast")
 
 [node name="FSM" type="Node" parent="." node_paths=PackedStringArray("CurrentState")]
 script = ExtResource("2_gl0jx")
@@ -1128,7 +1134,7 @@ _smoothSpeed = 50.0
 
 [node name="LookAt" type="RayCast3D" parent="Mesh/Neck/Head/Eyes/CamHead/CameraShaker/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-target_position = Vector3(0, 2, 0)
+target_position = Vector3(0, 3, 0)
 
 [node name="ShakeCollider" type="CollisionShape3D" parent="Mesh/Neck/Head/Eyes/CamHead/CameraShaker"]
 shape = SubResource("SphereShape3D_q80lt")
@@ -1350,6 +1356,12 @@ volume_db = 1.5
 max_db = 6.0
 bus = &"Movement"
 
+[node name="JumpPad" type="AudioStreamPlayer3D" parent="PlayerAudio"]
+stream = ExtResource("43_6bub7")
+volume_db = 5.0
+max_db = 6.0
+bus = &"Movement"
+
 [node name="OutOfBreath" type="AudioStreamPlayer3D" parent="PlayerAudio"]
 stream = SubResource("AudioStreamWAV_40t3s")
 volume_db = 5.0
@@ -1390,9 +1402,14 @@ fixed_fps = 60
 process_material = SubResource("ParticleProcessMaterial_kolqo")
 draw_pass_1 = SubResource("QuadMesh_s1a8d")
 
-[node name="PlayerPostProcessing" type="Node3D" parent="."]
+[node name="GroundCast" type="ShapeCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00331998, 0.125991, -0.0188755)
+shape = SubResource("SphereShape3D_sr6k4")
+target_position = Vector3(0, 0, 0)
+collision_mask = 3
 
 [node name="Stepper" type="Node3D" parent="." node_paths=PackedStringArray("_stepperRay", "_characterBody", "_playerMovement", "_pointGizmo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00331998, 0.00930583, -0.0188755)
 script = ExtResource("38_kln8r")
 _stepperRay = NodePath("Stepper_Ray")
 _characterBody = NodePath("..")

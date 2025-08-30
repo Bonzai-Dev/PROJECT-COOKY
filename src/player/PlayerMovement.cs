@@ -155,7 +155,9 @@ public partial class PlayerMovement : CharacterBody3D {
   [ExportSubgroup("Game stuff")]
   [Export] private AudioStreamPlayer3D outOfBreath;
   [Export] private AudioStreamPlayer3D eatingCooky;
+  [Export] private AudioStreamPlayer3D jumpPadSound;
   [Export] private RayCast3D lookatRaycast;
+  [Export] private ShapeCast3D groundCast;
   private RichTextLabel interactLabel;
   private ShaderMaterial radialBlurShader;
   private double staminaProgressTime;
@@ -523,6 +525,14 @@ public partial class PlayerMovement : CharacterBody3D {
       playerVelocity.Y = jumpSpeed;
     }
 
+    if (groundCast.CollisionResult.Count > 0 && groundCast.GetCollider(0) is JumpPad jumpPad) {
+      var normal = groundCast.GetCollisionNormal(0);
+      playerVelocity += normal * jumpPad.JumpAmount;
+      
+      if (!jumpPadSound.Playing)
+        jumpPadSound.Play();
+    }
+    
     _jumpsDone++;
     RemoveStamina(jumpSpeed);
   }
@@ -674,7 +684,7 @@ public partial class PlayerMovement : CharacterBody3D {
       "movement_forward", "movement_backward"
     );
     inputDirection = inputDir;
-
+    
     VelocityChange?.Invoke(Velocity); // Invoke change in velocity event
 
     HandleAnimation();
@@ -765,7 +775,7 @@ public partial class PlayerMovement : CharacterBody3D {
     }
 
     playerVelocity = Velocity;
-
+    
     if (IsOnFloor()) {
       direction = direction.Lerp((Transform.Basis * new Vector3(inputDir.X, 0f, inputDir.Y)).Normalized(),
         1.0f - Mathf.Pow(0.5f, (float)delta * lerpSpeed));
@@ -792,9 +802,9 @@ public partial class PlayerMovement : CharacterBody3D {
       playerVelocity.X = Mathf.MoveToward(Velocity.X, 0, currentSpeed);
       playerVelocity.Z = Mathf.MoveToward(Velocity.Z, 0, currentSpeed);
     }
-
-    Velocity = playerVelocity;
-
+    
+    Velocity = playerVelocity ;
+    
     _lastPhysicsPos = GlobalTransform.Origin;
     lastVelocity = playerVelocity;
 
@@ -802,10 +812,9 @@ public partial class PlayerMovement : CharacterBody3D {
     if (movingSpeed > walkingSpeed && 
         (FSM.CurrentState is PlayerSprint || FSM.CurrentState is PlayerWallrun || FSM.CurrentState is PlayerVerticalWallrun))
       RemoveStamina(movingSpeed / 100);
-
     if (Velocity.Length() > walkingSpeed && currentStamina == 0)
       sprintAction = false;
-    
+   
     _previousSprintAction = sprintAction;
     MoveAndSlide();
   }

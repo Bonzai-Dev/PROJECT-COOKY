@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bcqbem3f6glmb"
-path.s3tc="res://.godot/imported/white_texture1_text.png-eca5b0b5d49d91db7a2d6ff05e96bc28.s3tc.ctex"
+uid="uid://otu6umi1tnh8"
+path.s3tc="res://.godot/imported/omega_labs.png-26871bdac0c529124684cf54c5553fb5.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/images/white_texture1_text.png"
-dest_files=["res://.godot/imported/white_texture1_text.png-eca5b0b5d49d91db7a2d6ff05e96bc28.s3tc.ctex"]
+source_file="res://assets/images/logo/omega_labs.png"
+dest_files=["res://.godot/imported/omega_labs.png-26871bdac0c529124684cf54c5553fb5.s3tc.ctex"]
 
 [params]
 
@@ -32,4 +32,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1

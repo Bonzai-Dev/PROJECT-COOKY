@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bvglg570mlx4q"
-path="res://.godot/imported/platforms.glb-7c14c356326fc3531ac0db0ee847f9dc.scn"
+uid="uid://cs7k1iu2xm7ea"
+path="res://.godot/imported/cooky map.glb-6e048b6b32fd3101f90bc3b190898626.scn"
 
 [deps]
 
-source_file="res://assets/models/platforms.glb"
-dest_files=["res://.godot/imported/platforms.glb-7c14c356326fc3531ac0db0ee847f9dc.scn"]
+source_file="res://assets/nodes/cooky map.glb"
+dest_files=["res://.godot/imported/cooky map.glb-6e048b6b32fd3101f90bc3b190898626.scn"]
 
 [params]
 
@@ -32,21 +32,6 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-_subresources={
-"nodes": {
-"PATH:Cube": {
-"generate/physics": true
-},
-"PATH:Platform": {
-"generate/physics": true
-},
-"PATH:Tunnel": {
-"generate/physics": true
-},
-"PATH:Walls": {
-"generate/physics": true
-}
-}
-}
+_subresources={}
 gltf/naming_version=1
 gltf/embedded_image_handling=1

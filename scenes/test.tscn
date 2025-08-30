@@ -219,6 +219,7 @@ collision_layer = 2
 size = Vector3(10, 1, 10)
 script = ExtResource("10_ajshl")
 JumpAmount = 10.0
+metadata/_edit_lock_ = true
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="Game/GameViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.29044, -24.904)

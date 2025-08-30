@@ -6,6 +6,7 @@ Play the game at https://bonzai-dev.itch.io/project-cooky
 [@Maxence](https://www.youtube.com/@MaxenceThePotato) for the epic models
 <br>
 [@foufouv](https://www.youtube.com/@foufouv/videos) for the textures and logo
-
+<br>
+[Movement system](https://github.com/theRealUnd3rdog/Godot_Noshot_Controller)
 ## Bulding
 Make sure to have .NET SDK 8.0 installed for godot mono 4.4 and just build it like a usual godot project

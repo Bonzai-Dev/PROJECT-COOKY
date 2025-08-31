@@ -90,6 +90,7 @@ public partial class Game : Node {
       }));
 
       exitButton.Pressed += () => {
+        if (quitting) return;
         FadeIn();
         vhsStart.Stop();
         vhsEject.Play();

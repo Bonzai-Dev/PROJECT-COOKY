@@ -1,5 +1,7 @@
 Play the game at https://bonzai-dev.itch.io/project-cooky
 
+Really not the best code ive written lol
+
 ## Credits
 [@Research](https://www.youtube.com/channel/UCGa2xJPuMlI0ACQQkZCHWmA) for the dope music
 <br>

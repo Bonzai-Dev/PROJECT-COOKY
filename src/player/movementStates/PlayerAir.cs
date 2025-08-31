@@ -46,7 +46,7 @@ public partial class PlayerAir : PlayerMovementState {
     }
 
     // Wallrun
-    if (Movement.currentStamina == 0) return;
+    if (Movement.currentOverTime >= Movement.Overtime) return;
     if (Movement.CheckWall(out KinematicCollision3D collision, out String direction)
         && Movement.wallRunTimer <= Movement.wallRunTime
         && Movement.airTime < 2f

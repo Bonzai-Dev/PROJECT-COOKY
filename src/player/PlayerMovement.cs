@@ -158,6 +158,8 @@ public partial class PlayerMovement : CharacterBody3D {
   [Export] private AudioStreamPlayer3D jumpPadSound;
   [Export] private RayCast3D lookatRaycast;
   [Export] private ShapeCast3D groundCast;
+  [Export] public float Overtime { get; private set; }
+  public float currentOverTime { get; set; }
   private RichTextLabel interactLabel;
   private ShaderMaterial radialBlurShader;
   private double staminaProgressTime;
@@ -182,9 +184,6 @@ public partial class PlayerMovement : CharacterBody3D {
 
     _minFov = _camera.Fov;
 
-    // Make the mouse confined and within the center of the screen
-    Input.MouseMode = Input.MouseModeEnum.Captured;
-
     // Events
     PlayerAir.PlayerLanded += ResetJumps;
 
@@ -204,6 +203,8 @@ public partial class PlayerMovement : CharacterBody3D {
   }
 
   public override void _Input(InputEvent @event) {
+    if (Game.CurrentState != Game.GameState.PLAYING) return;
+
     // Mouse movement on camera
     if (@event is InputEventMouseMotion eventMouseMotion) {
       switch (camState) {
@@ -230,10 +231,12 @@ public partial class PlayerMovement : CharacterBody3D {
 
   private double targetBlur;
   public override void _Process(double delta) {
+    if (Game.CurrentState != Game.GameState.PLAYING) return;
+    
+    // Make the mouse confined and within the center of the screen
+    Input.MouseMode = Input.MouseModeEnum.Captured;
+    
     HandleZRotation((float)delta);
-
-    if (Input.IsKeyPressed(Key.R) && _resetPosition != null)
-      GlobalPosition = _resetPosition.GlobalPosition;
 
     PhysicsInterpolation();
 
@@ -257,7 +260,8 @@ public partial class PlayerMovement : CharacterBody3D {
         ItemInSight().GetNode<Node3D>("Cookies").Free();
         ItemInSight().Name = "EmptyPlate";
         eatingCooky.Play();
-        AddStamina(25 + GD.RandRange(-5, 5));
+        AddStamina(60 + GD.RandRange(-5, 10));
+        currentOverTime = 0;
         interactLabel.Visible = false;
       }
     }
@@ -479,7 +483,7 @@ public partial class PlayerMovement : CharacterBody3D {
         && !stepCast.IsColliding() && vaultElevation > minElevation &&
         (angleToFloor > 80f || Mathf.IsZeroApprox(angleToFloor))) {
       vaultPoint = _vaultPoint;
-      DebugDraw3D.DrawSphere(_vaultPoint, 0.25f, Colors.Red);
+      // DebugDraw3D.DrawSphere(_vaultPoint, 0.25f, Colors.Red);
 
       return true;
     }
@@ -629,7 +633,7 @@ public partial class PlayerMovement : CharacterBody3D {
           if (upAngleDot > 0.2f) {
             // Check if player velocity is more than or equal to 0
             if (Velocity.Y >= 0) {
-              DebugDraw3D.DrawArrow(wallPoint, wallPoint + (wallDirection * 1f), Colors.Aqua, 0.2f);
+              // DebugDraw3D.DrawArrow(wallPoint, wallPoint + (wallDirection * 1f), Colors.Aqua, 0.2f);
               return true;
             }
           }
@@ -667,7 +671,7 @@ public partial class PlayerMovement : CharacterBody3D {
       rayArray.TryGetValue("position", out Variant position);
       rayArray.TryGetValue("collider", out Variant collider);
 
-      DebugDraw3D.DrawArrow(rayOrigin, rayEnd, Colors.GreenYellow, 0.2f);
+      // DebugDraw3D.DrawArrow(rayOrigin, rayEnd, Colors.GreenYellow, 0.2f);
 
       rayNormal = normal.AsVector3();
       rayPoint = position.AsVector3();
@@ -679,6 +683,8 @@ public partial class PlayerMovement : CharacterBody3D {
   }
 
   public override void _PhysicsProcess(double delta) {
+    if (Game.CurrentState != Game.GameState.PLAYING) return;
+
     Vector2 inputDir = Input.GetVector(
       "movement_left", "movement_right",
       "movement_forward", "movement_backward"
@@ -791,7 +797,7 @@ public partial class PlayerMovement : CharacterBody3D {
       }
     }
 
-    if (FSM.CurrentState is not PlayerVault && FSM.CurrentState is not PlayerWallrun && currentStamina > 0)
+    if (FSM.CurrentState is not PlayerVault && FSM.CurrentState is not PlayerWallrun && currentOverTime < Overtime)
       HandleJump(_jumpVelocity);
 
     if (direction != Vector3.Zero) {
@@ -803,7 +809,7 @@ public partial class PlayerMovement : CharacterBody3D {
       playerVelocity.Z = Mathf.MoveToward(Velocity.Z, 0, currentSpeed);
     }
     
-    Velocity = playerVelocity ;
+    Velocity = playerVelocity;
     
     _lastPhysicsPos = GlobalTransform.Origin;
     lastVelocity = playerVelocity;
@@ -812,11 +818,19 @@ public partial class PlayerMovement : CharacterBody3D {
     if (movingSpeed > walkingSpeed && 
         (FSM.CurrentState is PlayerSprint || FSM.CurrentState is PlayerWallrun || FSM.CurrentState is PlayerVerticalWallrun))
       RemoveStamina(movingSpeed / 100);
-    if (Velocity.Length() > walkingSpeed && currentStamina == 0)
-      sprintAction = false;
-   
+
+    if (currentStamina == 0) {
+      currentOverTime += (float)delta;
+      if (Velocity.Length() > walkingSpeed && currentOverTime >= Overtime)
+        sprintAction = false;
+    }
+  
     _previousSprintAction = sprintAction;
     MoveAndSlide();
+
+    if (Position.Y < -20) {
+      Game.RestartLevel();
+    }
   }
 
   private void SetStamina(float amount) {

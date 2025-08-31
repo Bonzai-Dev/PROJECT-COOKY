@@ -8,6 +8,7 @@ height = 0.064
 radius = 0.322
 
 [node name="CookyPlate" type="RigidBody3D"]
+freeze_mode = 1
 
 [node name="Cookies" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.042284, 0)

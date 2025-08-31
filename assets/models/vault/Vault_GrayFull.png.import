@@ -1,0 +1,38 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://c8y316rbi5ovk"
+path.s3tc="res://.godot/imported/Vault_GrayFull.png-ea4f51cf1e7bb6c9b4c64b99777419cf.s3tc.ctex"
+metadata={
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
+}
+generator_parameters={
+"md5": "5f74ee72d4d3d3d1c276f0c91eadd9e0"
+}
+
+[deps]
+
+source_file="res://assets/models/vault/Vault_GrayFull.png"
+dest_files=["res://.godot/imported/Vault_GrayFull.png-ea4f51cf1e7bb6c9b4c64b99777419cf.s3tc.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0

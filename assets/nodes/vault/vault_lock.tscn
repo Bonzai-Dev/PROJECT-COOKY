@@ -1,0 +1,50 @@
+[gd_scene load_steps=5 format=4 uid="uid://ccdayvdgh73n0"]
+
+[ext_resource type="Texture2D" uid="uid://cw4olt223ppvj" path="res://assets/models/vault/Vault_BlackFull.png" id="1_xrydg"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1hh55"]
+resource_name = "Black"
+cull_mode = 2
+albedo_texture = ExtResource("1_xrydg")
+metallic = 0.7
+roughness = 0.5
+texture_filter = 2
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_xmolw"]
+_surfaces = [{
+"aabb": AABB(-0.0437107, -0.0950441, -0.131942, 0.93132, 0.0950442, 0.931321),
+"format": 34896613377,
+"index_count": 96,
+"index_data": PackedByteArray("AAABAAIAAwAAAAIAAgAEAAMAAgABAAQABQADAAQABQAEAAEAAwAGAAAABQAGAAMABgAHAAAABwABAAAABgAIAAcABgAJAAgABgAFAAkACAAKAAcAAQAHAAoACAAJAAoABQABAAsACQAMAAoADQAFAAsACQAOAAwADwAKAAwAAQAKAA8ADgAPAAwAAQAQAAsADQALABAAAQAPABAAEQAFAA0ACQAFABEAEQANABAACQARAA4AEQAQAA8ADgARAA8A"),
+"name": "Black",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 18,
+"vertex_data": PackedByteArray("TDEAADkOAAD//wAATMwAALIzAAAAAAAAsjP//wAAAAD///7/TMwAAEzM/v///wAATDH+/zkOAADnJwAAaBMAAOcn/v9oEwAA1iT+/9YkAADWJAAA1iQAAEzMAAD+/wAAaBMAAOcnAAAAAP7/sjMAAGgT/v/nJwAAOQ4AAEwxAAAAAAAAsjMAADkO/v9MMQAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_s4iwo"]
+resource_name = "Vault_Circle_012"
+_surfaces = [{
+"aabb": AABB(-0.0437107, -0.0950441, -0.131942, 0.93132, 0.0950442, 0.931321),
+"attribute_data": PackedByteArray("X1OiQOZNQcPmTb08K1g/P+te+kN3aqJAqmU/P/BvvTzwb0HD8G9Bwxl8vTwZfEHD8G+9PG1IokDhPPpDoEM/P9wrQcPmTb085k1Bw1UxokDcK708IjY/Pxl8QcNDiEiCQ4hBwxl8SIJDiD9gGXxIghl8P2BDiEiCGXwKVkOI2U1DiApWGXzZTfmA2U0ZfK9B+YCvQRl82U3+jEHDQ4gXt/6MF7dDiEHDKIwXt0OI7aoojO2qQ4gXtxl8k1lDiApWQ4iTWRl8ClYZfD9gQ4iTWUOIP2AZfJNZ"),
+"format": 34896613399,
+"index_count": 96,
+"index_data": PackedByteArray("AAABAAIAAwABAAAAAQADAAQAAQAEAAUABQAEAAYAAQAFAAcAAQAHAAgACQAKAAsACQAMAAoADQAOAA8ADQAQAA4AEAANABEAEAARABIADgAQABMAEwAQABQADgATABUAFgAXABgAFgAZABcAGgAbABwAGgAdABsAHgAfACAAHgAhAB8AIgAjACQAIgAlACMAJgAnACgAJgApACcAKgArACwAKgAtACsALgAvADAALgAxAC8AMgAzADQAMgA1ADMA"),
+"material": SubResource("StandardMaterial3D_1hh55"),
+"name": "Black",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 54,
+"vertex_data": PackedByteArray("TDEAADkOqun//wAATMyq6bIzAAAAAKrp5ycAAGgTqunWJAAA1iSq6TkOAABMMarpaBMAAOcnqukAAAAAsjOq6UzMAAD+/6rpsjMAAAAAqun///7/TMyq6bIz//8AAKrp//8AAEzMqulMMf7/OQ78xdYk/v/WJPzF5yf+/2gT/MVMzP7////8xbIz//8AAPzF///+/0zM/MU5Dv7/TDH8xQAA/v+yM/zFaBP+/+cn/MUAAP7/sjP8xUzMAAD+//zFAAAAALIz/MVMzP7////8xUzM/v////zF//8AAEzM/MVMzAAA/v/8xf///v9MzPzF5yf+/2gTiNnWJAAA1iSI2ecnAABoE4jZ1iT+/9YkiNloE/7/5yf//zkOAABMMf//aBMAAOcn//85Dv7/TDH//9Yk/v/WJP//aBMAAOcn///WJAAA1iT//2gT/v/nJ///OQ7+/0wx//8AAAAAsjP//zkOAABMMf//AAD+/7Iz//9MMf7/OQ6L8ecnAABoE4vxTDEAADkOi/HnJ/7/aBOL8bIz//8AAF3ZTDEAADkOXdmyMwAAAABd2Uwx/v85Dl3ZBDUI6gQ1COoENQjqBDUI6gQ1COoENQjqBDUI6gQ1COoENQjqBDUENQQ1BDUENQQ1BDUENf/iAUb/4gFG/+IBRv/iAUb/4gFG/+IBRv/iAUb/4gFG/+IBRgBj/pwAY/6cAGP+nABj/pz/HP8c/xz/HP8c/xz/HP8c61ITretSE63rUhOt61ITrf//gq///4Kv//+Cr///gq/+/0OK/v9Div7/Q4r+/0OK///jif//44n//+OJ///jiU1HsbhNR7G4TUexuE1HsbgDU/usA1P7rANT+6wDU/us")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_xmolw")
+
+[node name="VaultLock" type="Node3D"]
+
+[node name="Vault Lock" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1.95079, 5.48536e-07, -1.9508, -1.9508, -1.01364e-06, 1.95079, -3.2888e-07, 2.75884, 1.10463e-06, -1.04322, 0.172121, 0.868375)
+mesh = SubResource("ArrayMesh_s4iwo")
+skeleton = NodePath("")

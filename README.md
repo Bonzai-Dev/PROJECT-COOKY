@@ -9,6 +9,8 @@ Really not the best code ive written lol
 <br>
 [@foufouv](https://www.youtube.com/@foufouv/videos) for the textures and logo
 <br>
+@bug_spaz for playtesting
+<br>
 [Movement system](https://github.com/theRealUnd3rdog/Godot_Noshot_Controller)
 ## Bulding
 Make sure to have .NET SDK 8.0 installed for godot mono 4.4 and just build it like a usual godot project
